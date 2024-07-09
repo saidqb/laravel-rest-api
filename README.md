@@ -1,7 +1,15 @@
 # api-laravel
 
+VERSION FRAMEWORK : 10.X
+
 ## Description
+
 example Laravel Rest Api
+
+## Requirments
+
+PHP :  	8.1 - 8.3
+
 
 ## Donate
 
