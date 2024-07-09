@@ -1,4 +1,4 @@
-# api-laravel
+# laravel-rest-api
 
 VERSION FRAMEWORK : 10.X
 
