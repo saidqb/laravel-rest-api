@@ -143,14 +143,11 @@ trait HasResponse
     static function response($data = [], $status = ResponseCode::HTTP_OK, $message = ResponseCode::HTTP_OK_MESSAGE, $error_code = 0)
     {
         // rebuild the response data, if the data is not an array
-        if (is_string($data)) {
+        if (is_string($data) || is_numeric($data)){
             $error_code = $message == ResponseCode::HTTP_OK_MESSAGE ? $error_code : $message;
             $message = $status == ResponseCode::HTTP_OK ? $error_code : $status;
             $status = $data;
-        }
-
-
-        if (is_object($data)) {
+        } else if (is_object($data)) {
             $data = (array)$data;
         }
 

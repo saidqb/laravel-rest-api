@@ -9,12 +9,12 @@ use App\Models\User;
 use App\Supports\ResponseCode;
 use Illuminate\Support\Facades\Hash;
 use App\Supports\SQ;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends AuthCore
 {
     public function __construct()
     {
-        parent::__construct();
 
         /**
          * Set response config, modify the response data
@@ -44,7 +44,7 @@ class UserController extends AuthCore
 
         $request->merge([]);
 
-        $query = $this->db::table('users');
+        $query = DB::table('users');
 
         SQ::queryBuilder($request->all(), $query, $setFilter);
 
@@ -52,7 +52,7 @@ class UserController extends AuthCore
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly insertd resource in storage.
      */
     public function store(Request $request)
     {
@@ -64,19 +64,18 @@ class UserController extends AuthCore
 
         if ($validator->fails()) return $this->validationError($validator);
 
-        $this->db->beginTransaction();
+        DB::beginTransaction();
         try {
-            $data = $this->db::table('users')->create([
+            $data = DB::table('users')->insert([
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
             ]);
-            return $this->response($data);
         } catch (\Exception $e) {
-            $this->db->rollBack();
-            return $this->response(ResponseCode::HTTP_INTERNAL_SERVER_ERROR, 'Failed to create');
+            DB::rollBack();
+            return $this->response(ResponseCode::HTTP_INTERNAL_SERVER_ERROR, $e->getMessage());
         }
-        $this->db->commit();
+        DB::commit();
         return $this->response($data);
     }
 
@@ -85,7 +84,7 @@ class UserController extends AuthCore
      */
     public function show(string $id)
     {
-        $data = $this->db::table('users')->find($id);
+        $data = DB::table('users')->find($id);
         // print_r($data->to);die();
 
         return $this->response($data);
@@ -96,7 +95,7 @@ class UserController extends AuthCore
      */
     public function update(Request $request, string $id)
     {
-        $this->db->beginTransaction();
+        DB::beginTransaction();
         try {
 
             $validator = $this->validate($request, [
@@ -106,15 +105,15 @@ class UserController extends AuthCore
 
             if ($validator->fails()) return $this->validationError($validator);
 
-            $this->db::table('users')->find($id)->update([
+            DB::table('users')->find($id)->update([
                 'name' => $request->name,
                 'email' => $request->email,
             ]);
         } catch (\Exception $e) {
-            $this->db->rollBack();
+            DB::rollBack();
             return $this->response(ResponseCode::HTTP_INTERNAL_SERVER_ERROR, 'Failed to delete');
         }
-        $this->db->commit();
+        DB::commit();
         return $this->response($request->all());
     }
 
@@ -124,16 +123,16 @@ class UserController extends AuthCore
     public function destroy(string $id)
     {
 
-        $this->db->beginTransaction();
+        DB::beginTransaction();
         try {
 
-            $this->db::table('users')->find($id)->delete();
+            DB::table('users')->find($id)->delete();
             return $this->response(ResponseCode::HTTP_OK, 'Successfully deleted');
         } catch (\Exception $e) {
-            $this->db->rollBack();
+            DB::rollBack();
             return $this->response(ResponseCode::HTTP_INTERNAL_SERVER_ERROR, 'Failed to delete');
         }
-        $this->db->commit();
+        DB::commit();
         return $this->response(ResponseCode::HTTP_OK);
     }
 
@@ -143,7 +142,7 @@ class UserController extends AuthCore
     public function destroy_bulk(Request $request)
     {
 
-        $this->db->beginTransaction();
+        DB::beginTransaction();
         try {
             $validator = $this->validate($request, [
                 'id' => 'required|array',
@@ -154,14 +153,14 @@ class UserController extends AuthCore
             $id = $request->id;
 
             foreach ($id as $value) {
-                $this->db::table('users')->find($value)->delete();
+                DB::table('users')->find($value)->delete();
             }
             return $this->response(ResponseCode::HTTP_OK, 'Successfully deleted');
         } catch (\Exception $e) {
-            $this->db->rollBack();
+            DB::rollBack();
             return $this->response(ResponseCode::HTTP_INTERNAL_SERVER_ERROR, 'Failed to delete');
         }
-        $this->db->commit();
+        DB::commit();
         return $this->response(ResponseCode::HTTP_OK);
     }
 }

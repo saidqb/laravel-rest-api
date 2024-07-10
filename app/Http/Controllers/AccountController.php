@@ -15,8 +15,8 @@ class AccountController extends AuthCore
      */
     public function index(Request $request)
     {
-        $item = $request->user();
-        return $this->response(ResponseCode::HTTP_OK, 'Token refreshed');
+        $item = $request->user()->toArray();
+        return $this->response($item,ResponseCode::HTTP_OK, 'User data');
     }
 
     public function refresh_token(Request $request)
