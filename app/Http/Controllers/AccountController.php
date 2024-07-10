@@ -16,9 +16,8 @@ class AccountController extends AuthCore
     public function index(Request $request)
     {
         $item = $request->user();
-        return $this->response($item);
+        return $this->response(ResponseCode::HTTP_OK, 'Token refreshed');
     }
-
 
     public function refresh_token(Request $request)
     {
@@ -38,6 +37,6 @@ class AccountController extends AuthCore
     {
         $request->user()->currentAccessToken()->delete();
 
-        return $this->response([], ResponseCode::HTTP_OK, 'Successfully logged out');
+        return $this->response(ResponseCode::HTTP_OK, 'Successfully logged out');
     }
 }
