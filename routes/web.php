@@ -40,5 +40,6 @@ Route::prefix('v1')
                 Route::get('user/{id}', [Controllers\UserController::class, 'show'])->name('user.show');
                 Route::post('user/{id}', [Controllers\UserController::class, 'update'])->name('user.update');
                 Route::post('user/delete/{id}', [Controllers\UserController::class, 'destroy'])->name('user.destroy');
+                Route::post('user/delete_bulk', [Controllers\UserController::class, 'destroy_bulk'])->name('user.destroy_bulk');
             });
     });

@@ -8,18 +8,47 @@ use App\Http\Core\AuthCore;
 use App\Models\User;
 use App\Supports\ResponseCode;
 use Illuminate\Support\Facades\Hash;
+use App\Supports\SQ;
 
 class UserController extends AuthCore
 {
+    public function __construct()
+    {
+        parent::__construct();
+
+        /**
+         * Set response config, modify the response data
+         */
+        SQ::responseConfig([
+            'hide' => ['password'],
+            'decode' => [],
+            'decode_array' => [],
+        ]);
+    }
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
+        $setFilter = [
+            'select' => [
+                'id',
+                'name as full_name',
+                'email',
+            ],
+            'search' => [
+                'name',
+                'email',
+            ],
+        ];
 
-        $items = User::all();
+        $request->merge([]);
 
-        return $this->response($items);
+        $query = $this->db::table('users');
+
+        SQ::queryBuilder($request->all(), $query, $setFilter);
+
+        return $this->response(SQ::queryBuilderResult());
     }
 
     /**
@@ -37,7 +66,7 @@ class UserController extends AuthCore
 
         $this->db->beginTransaction();
         try {
-            $data = User::create([
+            $data = $this->db::table('users')->create([
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
@@ -56,7 +85,9 @@ class UserController extends AuthCore
      */
     public function show(string $id)
     {
-        $data = User::find($id);
+        $data = $this->db::table('users')->find($id);
+        // print_r($data->to);die();
+
         return $this->response($data);
     }
 
@@ -75,7 +106,7 @@ class UserController extends AuthCore
 
             if ($validator->fails()) return $this->validationError($validator);
 
-            User::find($id)->update([
+            $this->db::table('users')->find($id)->update([
                 'name' => $request->name,
                 'email' => $request->email,
             ]);
@@ -96,7 +127,35 @@ class UserController extends AuthCore
         $this->db->beginTransaction();
         try {
 
-            User::find($id)->delete();
+            $this->db::table('users')->find($id)->delete();
+            return $this->response(ResponseCode::HTTP_OK, 'Successfully deleted');
+        } catch (\Exception $e) {
+            $this->db->rollBack();
+            return $this->response(ResponseCode::HTTP_INTERNAL_SERVER_ERROR, 'Failed to delete');
+        }
+        $this->db->commit();
+        return $this->response(ResponseCode::HTTP_OK);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy_bulk(Request $request)
+    {
+
+        $this->db->beginTransaction();
+        try {
+            $validator = $this->validate($request, [
+                'id' => 'required|array',
+            ]);
+
+            if ($validator->fails()) return $this->validationError($validator);
+
+            $id = $request->id;
+
+            foreach ($id as $value) {
+                $this->db::table('users')->find($value)->delete();
+            }
             return $this->response(ResponseCode::HTTP_OK, 'Successfully deleted');
         } catch (\Exception $e) {
             $this->db->rollBack();
