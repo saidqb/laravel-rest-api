@@ -31,6 +31,7 @@ Route::prefix('v1')
         Route::middleware('auth:sanctum')
             ->group(function () {
                 Route::get('account', [Controllers\AccountController::class, 'index'])->name('account.index');
+                Route::post('account/update_password', [Controllers\AccountController::class, 'update_password'])->name('account.update_password');
                 Route::post('account/logout', [Controllers\AccountController::class, 'logout'])->name('account.logout');
                 Route::post('account/refresh_token', [Controllers\AccountController::class, 'refresh_token'])->name('account.refresh_token');
 
@@ -39,6 +40,7 @@ Route::prefix('v1')
                 Route::post('user', [Controllers\UserController::class, 'store'])->name('user.store');
                 Route::get('user/{id}', [Controllers\UserController::class, 'show'])->name('user.show');
                 Route::post('user/{id}', [Controllers\UserController::class, 'update'])->name('user.update');
+                Route::post('user/update_password/{id}', [Controllers\UserController::class, 'update_password'])->name('user.update_password');
                 Route::post('user/delete/{id}', [Controllers\UserController::class, 'destroy'])->name('user.destroy');
                 Route::post('user/delete_bulk', [Controllers\UserController::class, 'destroy_bulk'])->name('user.destroy_bulk');
             });
