@@ -12,6 +12,8 @@ use App\Supports\SQ;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rules\Password;
 
+use App\Supports\Make\FilterQuery;
+
 class UserController extends AuthCore
 {
     public function __construct()
@@ -29,27 +31,27 @@ class UserController extends AuthCore
     /**
      * Display a listing of the resource.
      */
+
     public function index(Request $request)
     {
-        $setFilter = [
-            'select' => [
+        $request->merge([]);
+
+        $query = SQ::make('QueryFilter')
+            ->request($request->all())
+            ->select([
                 'id',
                 'name as full_name',
                 'email',
-            ],
-            'search' => [
+            ])
+            ->search([
                 'name',
                 'email',
-            ],
-        ];
+            ])
+            ->query(function(){
+                return DB::table('users');
+            });
 
-        $request->merge([]);
-
-        $query = DB::table('users');
-
-        SQ::queryBuilder($request->all(), $query, $setFilter);
-
-        return $this->response(SQ::queryBuilderResult());
+        return $this->response($query->get());
     }
 
     /**
