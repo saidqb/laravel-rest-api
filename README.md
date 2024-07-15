@@ -19,7 +19,7 @@ use App\Supports\SQ;
 
 $query = SQ::make('QueryFilter')
     ->request($request->all())
-     ->select([
+    ->select([
         'id',
         'name as full_name',
         'email',
@@ -52,13 +52,11 @@ HEADER
 ```
 #Akses Api
 Api-Key: <yor api key>
-```
 
-Akses data login
-```
+# Akses data login, token didapat dari login
 Authorization: Bearer <token>
 ```
-token didapat dari login
+
 
 ## postman response default
 
