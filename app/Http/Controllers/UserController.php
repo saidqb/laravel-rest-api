@@ -10,6 +10,9 @@ use App\Supports\ResponseCode;
 use Illuminate\Support\Facades\Hash;
 use App\Supports\SQ;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rules\Password;
+
+use App\Supports\Make\FilterQuery;
 
 class UserController extends AuthCore
 {
@@ -28,27 +31,27 @@ class UserController extends AuthCore
     /**
      * Display a listing of the resource.
      */
+
     public function index(Request $request)
     {
-        $setFilter = [
-            'select' => [
+        $request->merge([]);
+
+        $query = SQ::make('QueryFilter')
+            ->request($request->all())
+            ->select([
                 'id',
                 'name as full_name',
                 'email',
-            ],
-            'search' => [
+            ])
+            ->search([
                 'name',
                 'email',
-            ],
-        ];
+            ])
+            ->query(function(){
+                return DB::table('users');
+            });
 
-        $request->merge([]);
-
-        $query = DB::table('users');
-
-        SQ::queryBuilder($request->all(), $query, $setFilter);
-
-        return $this->response(SQ::queryBuilderResult());
+        return $this->response($query->get());
     }
 
     /**
@@ -58,7 +61,7 @@ class UserController extends AuthCore
     {
         $validator = $this->validate($request, [
             'name' => 'required',
-            'email' => 'required|email',
+            'email' => sprintf('required|email|unique:users,email'),
             'password' => 'required',
         ]);
 
@@ -95,23 +98,50 @@ class UserController extends AuthCore
      */
     public function update(Request $request, string $id)
     {
+
+        $validator = $this->validate($request, [
+            'name' => 'required',
+            'email' => sprintf('required|email|unique:users,email,%s,id', $id)
+        ]);
+
+        if ($validator->fails()) return $this->validationError($validator);
+
         DB::beginTransaction();
         try {
 
-            $validator = $this->validate($request, [
-                'name' => 'required',
-                'email' => 'required|email',
-            ]);
-
-            if ($validator->fails()) return $this->validationError($validator);
-
-            DB::table('users')->find($id)->update([
+            DB::table('users')->where('id', $id)->update([
                 'name' => $request->name,
                 'email' => $request->email,
             ]);
         } catch (\Exception $e) {
             DB::rollBack();
-            return $this->response(ResponseCode::HTTP_INTERNAL_SERVER_ERROR, 'Failed to delete');
+            return $this->response(ResponseCode::HTTP_INTERNAL_SERVER_ERROR, $e->getMessage());
+        }
+        DB::commit();
+        return $this->response($request->all());
+    }
+
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update_password(Request $request, string $id)
+    {
+        $validator = $this->validate($request, [
+            'new_password' => ['required', Password::min(8)->mixedCase()->numbers()],
+        ]);
+
+        if ($validator->fails()) return $this->validationError($validator);
+
+        DB::beginTransaction();
+        try {
+
+            DB::table('users')->where('id', $id)->update([
+                'password' => Hash::make($request->new_password),
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $this->response(ResponseCode::HTTP_INTERNAL_SERVER_ERROR, $e->getMessage());
         }
         DB::commit();
         return $this->response($request->all());
@@ -126,7 +156,7 @@ class UserController extends AuthCore
         DB::beginTransaction();
         try {
 
-            DB::table('users')->find($id)->delete();
+            DB::table('users')->where('id', $id)->delete();
             return $this->response(ResponseCode::HTTP_OK, 'Successfully deleted');
         } catch (\Exception $e) {
             DB::rollBack();
@@ -150,10 +180,10 @@ class UserController extends AuthCore
 
             if ($validator->fails()) return $this->validationError($validator);
 
-            $id = $request->id;
+            $ids = $request->id;
 
-            foreach ($id as $value) {
-                DB::table('users')->find($value)->delete();
+            foreach ($ids as $id) {
+                DB::table('users')->where('id', $id)->delete();
             }
             return $this->response(ResponseCode::HTTP_OK, 'Successfully deleted');
         } catch (\Exception $e) {
