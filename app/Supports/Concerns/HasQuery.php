@@ -8,7 +8,7 @@ use Illuminate\Support\Str;
 
 trait HasQuery
 {
-    protected static $defaultLimit = 999999999;
+    protected static $noLimit = 999999999;
 
     protected static $queryBuilder = null;
     protected static $tableSelect = [];
@@ -89,7 +89,7 @@ trait HasQuery
                 $total_display = $limit;
             }
         }
-        if ($limit == static::$defaultLimit) {
+        if ($limit == static::$noLimit) {
             $limit = $total;
         }
         $pagination = array(
@@ -112,7 +112,7 @@ trait HasQuery
     {
         if ($laravel === true) {
 
-            if ($res->perPage() == static::$defaultLimit) {
+            if ($res->perPage() == static::$noLimit) {
                 $limit = $res->total();
             }
 
@@ -196,7 +196,7 @@ trait HasQuery
         }
 
         if ($req['limit'] == -1) {
-            $req['limit'] = static::$defaultLimit;
+            $req['limit'] = static::$noLimit;
         }
 
         $columns = [];
