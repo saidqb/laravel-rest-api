@@ -11,6 +11,14 @@ progress build...
 
 PHP :  	8.1 - 8.3
 
+## Modified Framework
+```
+.
++-- app
+|   +-- Exceptions
+|   |   +-- Handler.php
+```
+
 ## Filter Query 
 
 Using Filter Query
