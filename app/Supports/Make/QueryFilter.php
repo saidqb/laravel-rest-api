@@ -291,7 +291,7 @@ class QueryFilter
 
 
         $content['items'] = $items->items();
-        $content['pagination'] = self::queryPaginateGenerate($items, false);
+        $content['pagination'] = $this->queryPaginateGenerate($items, false);
         return $content;
     }
 
