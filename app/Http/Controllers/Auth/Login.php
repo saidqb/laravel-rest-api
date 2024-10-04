@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Auth;
 
 use Illuminate\Http\Request;
 use App\Http\Core\BaseCore;
@@ -10,12 +10,12 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use App\Supports\ResponseCode;
 
-class AuthController extends BaseCore
+class Login extends BaseCore
 {
     /**
      * Display a listing of the resource.
      */
-    public function login(Request $request)
+    public function __invoke(Request $request)
     {
         $request->validate([
             'email' => 'required|email',

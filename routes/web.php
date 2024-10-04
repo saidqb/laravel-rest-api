@@ -16,32 +16,34 @@ use App\Supports\ResponseCode;
 |
 */
 
-Route::get('/', fn () => SQ::response([],ResponseCode::HTTP_OK , 'Succeess Running',1))->name('home');
+Route::get('/', fn() => SQ::response([], ResponseCode::HTTP_OK, 'Succeess Running', 1))->name('home');
 
 
 
 Route::prefix('v1')
     ->middleware('api_key')
     ->group(function () {
-        Route::get('401', fn () => SQ::response([],ResponseCode::HTTP_UNAUTHORIZED , 'Unauthenticated',1))->name('401');
+        Route::get('401', fn() => SQ::response([], ResponseCode::HTTP_UNAUTHORIZED, 'Unauthenticated', 1))->name('401');
 
-        Route::post('login', [Controllers\AuthController::class, 'login'])->name('login');
-
+        Route::post('login', Controllers\Auth\Login::class)->name('login');
 
         Route::middleware('auth:sanctum')
             ->group(function () {
-                Route::get('account', [Controllers\AccountController::class, 'index'])->name('account.index');
-                Route::post('account/update_password', [Controllers\AccountController::class, 'update_password'])->name('account.update_password');
-                Route::post('account/logout', [Controllers\AccountController::class, 'logout'])->name('account.logout');
-                Route::post('account/refresh_token', [Controllers\AccountController::class, 'refresh_token'])->name('account.refresh_token');
+                // Account
+                $module = 'account';
+                Route::get($module, Controllers\Account\Show::class)->name($module . '.show');
+                Route::get($module . '/update_password', Controllers\Account\UpdatePassword::class)->name($module . '.update_password');
+                Route::get($module . '/logout', Controllers\Account\Logout::class)->name($module . '.logout');
+                Route::get($module . '/refresh_token', Controllers\Account\RefreshToken::class)->name($module . '.refresh_token');
 
                 // User
-                Route::get('user', [Controllers\UserController::class, 'index'])->name('user.index');
-                Route::post('user', [Controllers\UserController::class, 'store'])->name('user.store');
-                Route::get('user/{id}', [Controllers\UserController::class, 'show'])->name('user.show');
-                Route::post('user/{id}', [Controllers\UserController::class, 'update'])->name('user.update');
-                Route::post('user/update_password/{id}', [Controllers\UserController::class, 'update_password'])->name('user.update_password');
-                Route::post('user/delete/{id}', [Controllers\UserController::class, 'destroy'])->name('user.destroy');
-                Route::post('user/delete_bulk', [Controllers\UserController::class, 'destroy_bulk'])->name('user.destroy_bulk');
+                $module = 'user';
+                Route::get($module, Controllers\User\Index::class)->name($module . '.index');
+                Route::post($module, Controllers\User\Store::class)->name($module . '.store');
+                Route::get($module . '/{id}', Controllers\User\Show::class)->name($module . '.show');
+                Route::post($module . '/{id}', Controllers\User\Update::class)->name($module . '.update');
+                Route::post($module . '/update_password/{id}', Controllers\User\UpdatePassword::class)->name($module . '.update_password');
+                Route::post($module . '/delete/{id}', Controllers\User\Destroy::class)->name($module . '.destroy');
+                Route::post($module . '/delete_bulk', Controllers\User\DestroyBulk::class)->name($module . '.destroy_bulk');
             });
     });
