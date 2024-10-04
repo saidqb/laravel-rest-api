@@ -27,7 +27,7 @@ Route::prefix('v1')
 
         Route::post('login', Controllers\Auth\Login::class)->name('login');
 
-        Route::middleware('auth:sanctum')
+        Route::middleware(['auth:sanctum', 'api_role'])
             ->group(function () {
                 // Account
                 $module = 'account';
@@ -45,5 +45,17 @@ Route::prefix('v1')
                 Route::post($module . '/update_password/{id}', Controllers\User\UpdatePassword::class)->name($module . '.update_password');
                 Route::post($module . '/delete/{id}', Controllers\User\Destroy::class)->name($module . '.destroy');
                 Route::post($module . '/delete_bulk', Controllers\User\DestroyBulk::class)->name($module . '.destroy_bulk');
+
+
+                // User_role
+                $module = 'user_role';
+                Route::get($module, Controllers\User_role\Index::class)->name($module . '.index');
+                Route::post($module, Controllers\User_role\Store::class)->name($module . '.store');
+                Route::get($module . '/{id}', Controllers\User_role\Show::class)->name($module . '.show');
+                Route::post($module . '/{id}', Controllers\User_role\Update::class)->name($module . '.update');
+                Route::post($module . '/delete/{id}', Controllers\User_role\Destroy::class)->name($module . '.destroy');
+                Route::post($module . '/delete_bulk', Controllers\User_role\DestroyBulk::class)->name($module . '.destroy_bulk');
+                Route::get($module . '/permission', Controllers\User_role\Permission::class)->name($module . '.permission');
+
             });
     });

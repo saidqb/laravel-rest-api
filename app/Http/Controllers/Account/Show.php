@@ -10,6 +10,7 @@ use App\Supports\ResponseCode;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Support\Facades\Hash;
+use App\Supports\SQ;
 
 class Show extends AuthCore
 {
@@ -18,6 +19,11 @@ class Show extends AuthCore
      */
     public function __invoke(Request $request)
     {
+        SQ::responseConfig([
+            'hide' => ['password'],
+            'decode' => [],
+            'decode_array' => [],
+        ]);
 
         $item = $request->user()->toArray();
         return $this->response($item, ResponseCode::HTTP_OK, 'User data');

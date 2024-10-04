@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\User;
+namespace App\Http\Controllers\User_role;
 
 use Illuminate\Http\Request;
 use App\Http\Core\AuthCore;
@@ -22,8 +22,8 @@ class Index extends AuthCore
     public function __invoke(Request $request)
     {
         SQ::responseConfig([
-            'hide' => ['password'],
-            'decode' => [],
+            'hide' => [],
+            'decode' => ['menus','permissions'],
             'decode_array' => [],
         ]);
 
@@ -33,14 +33,14 @@ class Index extends AuthCore
             ->request($request->all())
             ->select([
                 'id',
-                'name as full_name',
-                'email',
+                'name',
+                'menus',
+                'permissions',
             ])
             ->search([
                 'name',
-                'email',
             ])
-            ->query(DB::table('users'));
+            ->query(DB::table('user_roles'));
 
         return $this->response($query->get());
     }

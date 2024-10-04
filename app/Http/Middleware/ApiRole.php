@@ -11,7 +11,7 @@ use App\Supports\SQ;
 use App\Supports\ResponseCode;
 use Illuminate\Support\Facades\Route;
 
-class ApiKey
+class ApiRole
 {
     /**
      * Handle an incoming request.
@@ -20,9 +20,11 @@ class ApiKey
      */
     public function handle(Request $request, Closure $next, string ...$guards): Response
     {
-
-        if ($request->header('api-key') != config('api.api_key')) {
-            return SQ::response([], ResponseCode::HTTP_UNAUTHORIZED, 'Unauthorized', 1);
+        // dd($request->user());
+        if ($request->user()->role?->id != 1) {
+            if ($request->user()->hasPermission(Route::currentRouteName()) === false) {
+                return SQ::response([], ResponseCode::HTTP_FORBIDDEN, ResponseCode::HTTP_FORBIDDEN_MESSAGE, 1);
+            }
         }
 
         return $next($request);

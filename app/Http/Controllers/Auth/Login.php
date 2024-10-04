@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use App\Supports\ResponseCode;
+use App\Supports\SQ;
 
 class Login extends BaseCore
 {
@@ -17,6 +18,12 @@ class Login extends BaseCore
      */
     public function __invoke(Request $request)
     {
+        SQ::responseConfig([
+            'hide' => ['password'],
+            'decode' => [],
+            'decode_array' => [],
+        ]);
+
         $request->validate([
             'email' => 'required|email',
             'password' => 'required',
@@ -38,5 +45,4 @@ class Login extends BaseCore
             'token' => $tokenArr[1],
         ], ResponseCode::HTTP_OK, 'Login successful');
     }
-
 }

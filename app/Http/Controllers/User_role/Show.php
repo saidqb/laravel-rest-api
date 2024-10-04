@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\User;
+namespace App\Http\Controllers\User_role;
 
 use Illuminate\Http\Request;
 use App\Http\Core\AuthCore;
@@ -22,13 +22,12 @@ class Show extends AuthCore
     public function __invoke(string $id)
     {
         SQ::responseConfig([
-            'hide' => ['password'],
-            'decode' => [],
+            'hide' => [],
+            'decode' => ['menus','permissions'],
             'decode_array' => [],
         ]);
 
-        $data = DB::table('users')->find($id);
-        // print_r($data->to);die();
+        $data = DB::table('user_roles')->find($id);
 
         return $this->response($data);
     }

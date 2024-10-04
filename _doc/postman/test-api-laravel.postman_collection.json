@@ -324,7 +324,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\" : \"web\",\r\n    \"email\": \"test2@t.t\",\r\n    \"password\":\"123456\"\r\n}",
+							"raw": "{\r\n    \"name\" : \"web\",\r\n    \"email\": \"test3@t.t\",\r\n    \"password\":\"123456\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -358,7 +358,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\" : \"web\",\r\n    \"email\": \"lonny97@example.net\"\r\n}",
+							"raw": "{\r\n    \"name\" : \"web\",\r\n    \"email\": \"lonny93@example.net\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -405,6 +405,213 @@
 							"path": [
 								"update_password",
 								"13"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "user_role",
+			"item": [
+				{
+					"name": "permission",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}user_role/permission?sort=-id",
+							"host": [
+								"{{base_url}}user_role"
+							],
+							"path": [
+								"permission"
+							],
+							"query": [
+								{
+									"key": "id[eq]",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "id[nin]",
+									"value": "1,2",
+									"disabled": true
+								},
+								{
+									"key": "search",
+									"value": "johan",
+									"disabled": true
+								},
+								{
+									"key": "sort[abcd]",
+									"value": "asc",
+									"disabled": true
+								},
+								{
+									"key": "limit",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "sort",
+									"value": "-id"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\" : \"User\",\r\n    \"menus\": []\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}user_role",
+							"host": [
+								"{{base_url}}user_role"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Api-Key",
+								"value": "mdfmjsdkowemjdjdsjdj",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\" : 2,\r\n    \"name\" : \"User\",\r\n    \"menus\": []\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}user_role/2",
+							"host": [
+								"{{base_url}}user_role"
+							],
+							"path": [
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "destroy",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"new_password\" : \"web\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}user_role/destroy/13",
+							"host": [
+								"{{base_url}}user_role"
+							],
+							"path": [
+								"destroy",
+								"13"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "destroy_bulk",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\" : [1,2]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}user_role/destroy_bulk",
+							"host": [
+								"{{base_url}}user_role"
+							],
+							"path": [
+								"destroy_bulk"
 							]
 						}
 					},
