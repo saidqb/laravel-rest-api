@@ -6,13 +6,13 @@ use Illuminate\Http\Request;
 use App\Http\Core\AuthCore;
 
 use App\Models\User;
-use App\Supports\ResponseCode;
+use Saidqb\LaravelSupport\ResponseCode;
 use Illuminate\Support\Facades\Hash;
-use App\Supports\SQ;
+use Saidqb\LaravelSupport\SQ;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rules\Password;
 
-use App\Supports\Make\FilterQuery;
+use Saidqb\LaravelSupport\Make\FilterQuery;
 
 class Index extends AuthCore
 {

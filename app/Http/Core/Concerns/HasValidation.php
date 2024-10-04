@@ -1,8 +1,8 @@
 <?php
 namespace App\Http\Core\Concerns;
 
-use App\Supports\SQ;
-use App\Supports\ResponseCode;
+use Saidqb\LaravelSupport\SQ;
+use Saidqb\LaravelSupport\ResponseCode;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 

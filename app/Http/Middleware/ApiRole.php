@@ -7,8 +7,8 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
-use App\Supports\SQ;
-use App\Supports\ResponseCode;
+use Saidqb\LaravelSupport\SQ;
+use Saidqb\LaravelSupport\ResponseCode;
 use Illuminate\Support\Facades\Route;
 
 class ApiRole

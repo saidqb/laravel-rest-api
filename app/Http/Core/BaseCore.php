@@ -3,8 +3,8 @@
 namespace App\Http\Core;
 
 use Illuminate\Routing\Controller;
-use App\Supports\SQ;
-use App\Supports\ResponseCode;
+use Saidqb\LaravelSupport\SQ;
+use Saidqb\LaravelSupport\ResponseCode;
 
 class BaseCore extends Controller
 {

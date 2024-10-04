@@ -8,8 +8,8 @@ use App\Http\Core\BaseCore;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
-use App\Supports\ResponseCode;
-use App\Supports\SQ;
+use Saidqb\LaravelSupport\ResponseCode;
+use Saidqb\LaravelSupport\SQ;
 
 class Login extends BaseCore
 {
