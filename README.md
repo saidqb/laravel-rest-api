@@ -23,7 +23,7 @@ PHP :  	8.1 - 8.3
 
 Using Filter Query
 ```php
-use App\Supports\SQ;
+use Saidqb\LaravelSupport\SQ;
 
 $query = SQ::make('QueryFilter')
     ->request($request->all())

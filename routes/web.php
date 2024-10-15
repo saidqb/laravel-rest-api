@@ -3,8 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Http\Controllers;
-use App\Supports\SQ;
-use App\Supports\ResponseCode;
+use Saidqb\LaravelSupport\SQ;
+use Saidqb\LaravelSupport\ResponseCode;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
