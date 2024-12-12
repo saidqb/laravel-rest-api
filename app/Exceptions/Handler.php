@@ -9,8 +9,8 @@ use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
-use App\Supports\ResponseCode;
-use App\Supports\SQ;
+use Saidqb\LaravelSupport\ResponseCode;
+use Saidqb\LaravelSupport\SQ;
 
 class Handler extends ExceptionHandler
 {

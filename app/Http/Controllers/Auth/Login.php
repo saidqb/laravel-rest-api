@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Auth;
 
 use Illuminate\Http\Request;
 use App\Http\Core\BaseCore;
@@ -8,15 +8,22 @@ use App\Http\Core\BaseCore;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
-use App\Supports\ResponseCode;
+use Saidqb\LaravelSupport\ResponseCode;
+use Saidqb\LaravelSupport\SQ;
 
-class AuthController extends BaseCore
+class Login extends BaseCore
 {
     /**
      * Display a listing of the resource.
      */
-    public function login(Request $request)
+    public function __invoke(Request $request)
     {
+        SQ::responseConfig([
+            'hide' => ['password'],
+            'decode' => [],
+            'decode_array' => [],
+        ]);
+
         $request->validate([
             'email' => 'required|email',
             'password' => 'required',
@@ -31,11 +38,11 @@ class AuthController extends BaseCore
             ]);
         }
 
+
         $tokenArr = explode('|', $user->createToken($request->device_name)->plainTextToken);
         return $this->response([
-            'item' => $user,
+            'item' => $user?->toArray(),
             'token' => $tokenArr[1],
         ], ResponseCode::HTTP_OK, 'Login successful');
     }
-
 }

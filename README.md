@@ -11,11 +11,19 @@ progress build...
 
 PHP :  	8.1 - 8.3
 
+## Modified Framework
+```
+.
++-- app
+|   +-- Exceptions
+|   |   +-- Handler.php
+```
+
 ## Filter Query 
 
 Using Filter Query
 ```php
-use App\Supports\SQ;
+use Saidqb\LaravelSupport\SQ;
 
 $query = SQ::make('QueryFilter')
     ->request($request->all())
@@ -123,5 +131,5 @@ DOC
 
 OR
 
-<a href="https://trakteer.id/saidqb" target="_blank"><img id="wse-buttons-preview" src="https://cdn.trakteer.id/images/embed/trbtn-red-1.png?date=18-11-2023" height="40" style="border:0px;height:40px;" alt="Trakteer Saya"></a>
+<a href="https://trakteer.id/saidqb/tip" target="_blank"><img id="wse-buttons-preview" src="https://cdn.trakteer.id/images/embed/trbtn-red-1.png?date=18-11-2023" height="40" style="border:0px;height:40px;" alt="Trakteer Saya"></a>
 
