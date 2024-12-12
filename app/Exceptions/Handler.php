@@ -63,7 +63,11 @@ class Handler extends ExceptionHandler
         if ($exception instanceof HttpException) {
             $status = $exception->getStatusCode();
 
-            return SQ::response([], $status, ResponseCode::getMessage($status));
+            if ($request->header('api-key') || $request->header('secret-key')) {
+                return SQ::response([], $status, ResponseCode::getMessage($status));
+            }
+
+            return response()->view('file-errors.' . $status);
         }
 
         if (env('APP_DEBUG')) {
