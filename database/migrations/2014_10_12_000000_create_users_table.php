@@ -19,11 +19,12 @@ return new class extends Migration
             $table->string('password');
             $table->unsignedInteger('role_id')->default('0');
             $table->rememberToken();
-            $table->timestamp('password_updated_at')->nullable();
             $table->timestamps();
 
 
+
             $table->index('role_id', 'role_id');
+
 
         });
     }

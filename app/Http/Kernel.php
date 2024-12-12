@@ -53,11 +53,8 @@ class Kernel extends HttpKernel
      * @var array<string, class-string|string>
      */
     protected $middlewareAliases = [
-        'frame_guard' => \App\Http\Middleware\FrameGuard::class,
         'api_key' => \App\Http\Middleware\ApiKey::class,
         'api_role' => \App\Http\Middleware\ApiRole::class,
-        'app_access' => \App\Http\Middleware\AppAccess::class,
-        'file_access' => \App\Http\Middleware\FileAccess::class,
         'auth' => \App\Http\Middleware\Authenticate::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'auth.session' => \Illuminate\Session\Middleware\AuthenticateSession::class,
